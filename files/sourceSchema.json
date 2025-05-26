@@ -1,0 +1,49 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Source API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/product": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "productName": { "type": "string" },
+          "quantity": { "type": "number" },
+          "shipDate": { "type": "string", "format": "date" },
+          "status": { "type": "string" },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "city": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

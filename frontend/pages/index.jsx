@@ -3,16 +3,12 @@ import { saveAs } from 'file-saver';
 import axios from 'axios';
 import LiveMappingView from '../components/LiveMappingView';
 
-
 const IndexPage = () => {
   const [sourceFile, setSourceFile] = useState(null);
   const [targetFile, setTargetFile] = useState(null);
   const [sourceFields, setSourceFields] = useState([]);
   const [targetFields, setTargetFields] = useState([]);
   const [editableMatches, setEditableMatches] = useState([]);
-
-  console.log("🔥 Rendering Snapsly Index Page");
-
 
   const handleExtractFields = async () => {
     if (!sourceFile || !targetFile) {
@@ -29,9 +25,6 @@ const IndexPage = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      console.log("Extracted sourceFields:", response.data.sourceFields);
-      console.log("Extracted targetFields:", response.data.targetFields);
-
       setSourceFields(response.data.sourceFields);
       setTargetFields(response.data.targetFields);
       setEditableMatches([]);
@@ -43,9 +36,6 @@ const IndexPage = () => {
 
   const handleMatch = async () => {
     try {
-      console.log("Sending sourceFields:", sourceFields);
-      console.log("Sending targetFields:", targetFields);
-
       const mappedSource = Array.isArray(sourceFields) && typeof sourceFields[0] === 'object'
         ? sourceFields.map(f => f.name)
         : sourceFields;
@@ -84,6 +74,14 @@ const IndexPage = () => {
     saveAs(blob, 'field-matches.csv');
   };
 
+  const resolvedSourcePaths = Array.isArray(sourceFields) && typeof sourceFields[0] === 'object'
+    ? sourceFields.map(f => f.name)
+    : sourceFields;
+
+  const resolvedTargetPaths = Array.isArray(targetFields) && typeof targetFields[0] === 'object'
+    ? targetFields.map(f => f.name)
+    : targetFields;
+
   return (
     <div style={{ padding: 20, fontFamily: 'Arial, sans-serif' }}>
       <h1>Snapsly Field Matcher</h1>
@@ -99,13 +97,13 @@ const IndexPage = () => {
       {/* Fields Preview */}
       <div style={{ marginBottom: 20 }}>
         <h4>Source Fields</h4>
-        <ul>{sourceFields.map((f, i) => (
-          <li key={i}>{typeof f === 'string' ? f : `${f.name} (${f.type})`}</li>
+        <ul>{resolvedSourcePaths.map((f, i) => (
+          <li key={i}>{f}</li>
         ))}</ul>
 
         <h4>Target Fields</h4>
-        <ul>{targetFields.map((f, i) => (
-          <li key={i}>{typeof f === 'string' ? f : `${f.name} (${f.type})`}</li>
+        <ul>{resolvedTargetPaths.map((f, i) => (
+          <li key={i}>{f}</li>
         ))}</ul>
       </div>
 
@@ -118,25 +116,17 @@ const IndexPage = () => {
         </div>
       </div>
 
-      {/* Step 3: Drag-and-Drop Mapping */}
-        {sourceFields.length > 0 && targetFields.length > 0 && (
-        <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
-            <h3>Step 3: Live Drag-and-Drop Mapping</h3>
-            <LiveMappingView
-            sourcePaths={
-                Array.isArray(sourceFields) && typeof sourceFields[0] === 'object'
-                ? sourceFields.map(f => f.name)
-                : sourceFields
-            }
-            targetPaths={
-                Array.isArray(targetFields) && typeof targetFields[0] === 'object'
-                ? targetFields.map(f => f.name)
-                : targetFields
-            }
-            />
-        </div>
-        )}
-
+      {/* Step 3: Live Mapping (Always visible for demo) */}
+      <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
+        <h3>Step 3: Live Drag-and-Drop Mapping</h3>
+        <LiveMappingView
+          sourcePaths={resolvedSourcePaths}
+          targetPaths={resolvedTargetPaths}
+          onSourcePathsUpdate={setSourceFields}
+          onTargetPathsUpdate={setTargetFields}
+        
+        />
+      </div>
 
       {/* Editable Matches */}
       {editableMatches.length > 0 && (
@@ -151,10 +141,8 @@ const IndexPage = () => {
                   onChange={(e) => updateMatch(index, e.target.value)}
                   style={{ margin: '0 10px' }}
                 >
-                  {targetFields.map((f, i) => (
-                    <option key={i} value={typeof f === 'string' ? f : f.name}>
-                      {typeof f === 'string' ? f : f.name}
-                    </option>
+                  {resolvedTargetPaths.map((f, i) => (
+                    <option key={i} value={f}>{f}</option>
                   ))}
                 </select>
                 <span>({match.confidence})</span>

@@ -1,0 +1,12 @@
+{
+    "id": "A123",
+    "productName": "Tea",
+    "quantity": 5,
+    "shipDate": "2024-10-12",
+    "status": "In Progress",
+    "customer": {
+      "name": "Alice",
+      "city": "Chennai"
+    }
+  }
+  

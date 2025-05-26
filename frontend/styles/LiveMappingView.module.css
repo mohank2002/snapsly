@@ -1,0 +1,103 @@
+.mapping-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr 2fr 40px;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.grid-header {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding: 4px 0;
+}
+
+.field-label {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #222;
+}
+
+.grid-input {
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.grid-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+.remove-btn {
+  background: transparent;
+  color: #c00;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  color: #f00;
+}
+.layout-columns {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow: auto;
+}
+
+/* Define width ratios */
+.source {
+  flex: 1.2;
+}
+
+.target {
+  flex: 1.2;
+}
+
+.mapped {
+  flex: 2;
+  min-width: 460px;
+}
+
+.grid-preview {
+  padding: 6px;
+  font-family: monospace;
+  color: #444;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mapping-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1.5fr 2fr 0.5fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.grid-header {
+  font-weight: bold;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ccc;
+}

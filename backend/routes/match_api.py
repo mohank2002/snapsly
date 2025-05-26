@@ -1,32 +1,35 @@
-# routes/match_api.py
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List
 from sentence_transformers import SentenceTransformer, util
 
 router = APIRouter()
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight + good accuracy
 
 class MatchRequest(BaseModel):
     sourceFields: List[str]
     targetFields: List[str]
 
-@router.post("/")
-async def match_fields(payload: MatchRequest):
-    src = payload.sourceFields
-    tgt = payload.targetFields
+@router.post("/auto")
+async def auto_match_fields(payload: MatchRequest):
+    source = payload.sourceFields
+    target = payload.targetFields
 
-    src_emb = model.encode(src, convert_to_tensor=True)
-    tgt_emb = model.encode(tgt, convert_to_tensor=True)
+    source_embeddings = model.encode(source, convert_to_tensor=True)
+    target_embeddings = model.encode(target, convert_to_tensor=True)
 
-    matches = []
-    for i, s in enumerate(src):
-        sim = util.pytorch_cos_sim(src_emb[i], tgt_emb)[0]
-        best_idx = int(sim.argmax())
-        confidence = round(float(sim[best_idx]), 2)
-        matches.append({
-            "source": s,
-            "target": tgt[best_idx],
+    mappings = {}
+
+    for i, src_field in enumerate(source):
+        similarity_scores = util.pytorch_cos_sim(source_embeddings[i], target_embeddings)[0]
+        best_idx = int(similarity_scores.argmax())
+        best_match = target[best_idx]
+        confidence = round(float(similarity_scores[best_idx]), 2)
+
+        # Store just the best target field; optionally include confidence
+        mappings[src_field] = {
+            "target": best_match,
             "confidence": confidence
-        })
-    return matches
+        }
+
+    return {"mappings": mappings}

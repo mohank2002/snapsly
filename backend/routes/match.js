@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const { extractFieldsFromSchema } = require('../../lib/schemaParser');
+const { generateSampleInput } = require('../../lib/generateSample');
 
 // ✅ 1. Handle schema field extraction from uploaded files
 router.post('/extract', async (req, res) => {
@@ -70,5 +72,32 @@ router.get('/get-mappings/:sessionId', (req, res) => {
 
   res.json({ mappings });
 });
+
+// ✅ 3. Generate sample input
+router.post('/generate-sample', async (req, res) => {
+  try {
+    const schema = req.body;
+    if (!schema || typeof schema !== 'object') {
+      return res.status(400).json({ error: 'Invalid JSON schema' });
+    }
+
+    const sample = await generateSampleInput(schema);
+    return res.json({ sampleInput: sample });
+  } catch (err) {
+    console.error('Error generating sample:', err);
+    return res.status(500).json({ error: 'Failed to generate sample input' });
+  }
+});
+
+// ✅ 4. Proxy to Python backend for ZIP export or other routes
+router.use(
+    '/python-api',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+      pathRewrite: { '^/python-api': '/api' }  // ✅ this is key
+    })
+  );
+
 
 module.exports = router;

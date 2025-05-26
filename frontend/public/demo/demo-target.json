@@ -1,0 +1,38 @@
+{
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "item": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "qty": { "type": "number" }
+            }
+          },
+          "shipment": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" }
+            }
+          },
+          "status": { "type": "string" },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "city": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

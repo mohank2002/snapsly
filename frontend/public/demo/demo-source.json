@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "productName": { "type": "string" },
+      "quantity": { "type": "number" },
+      "shipDate": { "type": "string" },
+      "status": { "type": "string" },
+      "customer": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "city": { "type": "string" }
+        }
+      }
+    }
+  }
+  
