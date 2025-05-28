@@ -1,0 +1,26 @@
+/* styles/FieldBox.module.css */
+
+.fieldBox {
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: grab;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    transition: background 0.2s ease-in-out, border-color 0.2s;
+  }
+  
+  .fieldBox:hover {
+    background-color: #f9fafb;
+    border-color: #3b82f6;
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .unmatched {
+    background-color: #fef2f2;
+    border: 1px dashed #dc2626;
+    color: #b91c1c;
+  }
+  

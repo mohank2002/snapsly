@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
 import LiveMappingView from '../components/LiveMappingView';
-
+import UploadSchemasMenu from '../components/UploadSchemasMenu';
 const IndexPage = () => {
   const [sourceFile, setSourceFile] = useState(null);
   const [targetFile, setTargetFile] = useState(null);
   const [sourceFields, setSourceFields] = useState([]);
   const [targetFields, setTargetFields] = useState([]);
   const [editableMatches, setEditableMatches] = useState([]);
+
+  const [zipMappings, setZipMappings] = useState({});
+  const [zipSampleInput, setZipSampleInput] = useState({});
+  const [zipTransformCode, setZipTransformCode] = useState('');
+
+  useEffect(() => {
+    console.log("✅ Updated sourcePaths in parent:", sourceFields);
+  }, [sourceFields]);
+
+  useEffect(() => {
+    console.log("🎯 Updated targetPaths in parent:", targetFields);
+  }, [targetFields]);
+
 
   const handleExtractFields = async () => {
     if (!sourceFile || !targetFile) {
@@ -82,20 +95,28 @@ const IndexPage = () => {
     ? targetFields.map(f => f.name)
     : targetFields;
 
+
   return (
     <div style={{ padding: 20, fontFamily: 'Arial, sans-serif' }}>
-      <h1>Snapsly Field Matcher</h1>
-
+       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1>Snapsly Field Matcher</h1>
+          <UploadSchemasMenu
+            onSourceSelect={setSourceFile}
+            onTargetSelect={setTargetFile}
+            onExtract={handleExtractFields}
+          />
+        </div>
+      
       {/* Step 1: Upload */}
-      <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
+      {/* <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
         <h3>Step 1: Upload OpenAPI Schemas</h3>
         <input type="file" onChange={(e) => setSourceFile(e.target.files[0])} />
         <input type="file" onChange={(e) => setTargetFile(e.target.files[0])} />
         <button onClick={handleExtractFields} style={{ marginLeft: 10 }}>Extract Fields</button>
-      </div>
+      </div> */}
 
       {/* Fields Preview */}
-      <div style={{ marginBottom: 20 }}>
+      {/* <div style={{ marginBottom: 20 }}>
         <h4>Source Fields</h4>
         <ul>{resolvedSourcePaths.map((f, i) => (
           <li key={i}>{f}</li>
@@ -105,31 +126,33 @@ const IndexPage = () => {
         <ul>{resolvedTargetPaths.map((f, i) => (
           <li key={i}>{f}</li>
         ))}</ul>
-      </div>
+      </div> */}
 
       {/* Step 2: Match + Export */}
-      <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
+      {/* <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
         <h3>Step 2: Match Fields</h3>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={handleMatch}>Match Fields</button>
           <button onClick={exportToCSV}>Export Matches as CSV</button>
         </div>
-      </div>
+      </div> */}
 
-      {/* Step 3: Live Mapping (Always visible for demo) */}
+      {/* Step 3: Live Mapping */}
       <div style={{ border: '1px solid #ccc', padding: 15, marginBottom: 20 }}>
-        <h3>Step 3: Live Drag-and-Drop Mapping</h3>
+        {/* <h3>Step 3: Live Drag-and-Drop Mapping</h3> */}
         <LiveMappingView
           sourcePaths={resolvedSourcePaths}
           targetPaths={resolvedTargetPaths}
           onSourcePathsUpdate={setSourceFields}
           onTargetPathsUpdate={setTargetFields}
-        
+          initialMappings={zipMappings}
+          initialSample={zipSampleInput}  
+          initialCode={zipTransformCode}
         />
       </div>
 
       {/* Editable Matches */}
-      {editableMatches.length > 0 && (
+      {/* {editableMatches.length > 0 && (
         <div style={{ border: '1px solid #ccc', padding: 15 }}>
           <h3>Editable Matches</h3>
           <ul>
@@ -150,7 +173,7 @@ const IndexPage = () => {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

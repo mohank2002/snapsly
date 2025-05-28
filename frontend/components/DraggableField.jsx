@@ -1,4 +1,5 @@
 import { useDrag } from 'react-dnd';
+import styles from '../styles/FieldBox.module.css';
 
 const DraggableField = ({ name }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -12,12 +13,8 @@ const DraggableField = ({ name }) => {
   return (
     <div
       ref={drag}
-      className="field-box"
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: 'grab',
-        backgroundColor: '#fff',
-      }}
+      className={styles.fieldBox}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       {name}
     </div>

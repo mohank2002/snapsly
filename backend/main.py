@@ -4,6 +4,7 @@ from routes.transform_api import router as transform_router
 from routes.download import router as download_router  # ✅ Import the ZIP download router
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+from routes.upload import router as upload_router
 
 load_dotenv()
 
@@ -21,3 +22,4 @@ app.add_middleware(
 app.include_router(match_router, prefix="/match")
 app.include_router(transform_router, prefix="/transform")
 app.include_router(download_router, prefix="/api")  # ✅ ZIP export endpoint available at /api/download-zip
+app.include_router(upload_router, prefix="/api")  # ✅ ZIP upload endpoint available at /api/upload-zip

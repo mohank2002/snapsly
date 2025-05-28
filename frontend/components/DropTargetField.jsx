@@ -1,7 +1,8 @@
 import { useDrop } from 'react-dnd';
+import styles from '../styles/FieldBox.module.css';
 
 const DropTargetField = ({ name, onDrop, isMapped }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'FIELD',
     drop: (item) => {
       if (item.type === 'source') {
@@ -9,18 +10,22 @@ const DropTargetField = ({ name, onDrop, isMapped }) => {
       }
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver()
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
     })
   }));
 
   return (
     <div
       ref={drop}
-      className={`field-box ${isOver ? 'bg-green-100' : ''} ${isMapped ? 'opacity-60' : ''}`}
+      className={`field-box ${!isMapped ? 'unmatched' : ''}`}
       style={{
-        backgroundColor: isOver ? '#d1fae5' : '#f9fafb',
-        opacity: isMapped ? 0.6 : 1,
-        cursor: 'pointer',
+        backgroundColor: isOver && canDrop ? '#e0f2fe' : !isMapped ? '#fef2f2' : 'white',
+        border: isOver && canDrop
+          ? '2px dashed #3b82f6'
+          : !isMapped
+          ? '1px dashed #dc2626'
+          : '1px solid #ccc'
       }}
     >
       {name}
